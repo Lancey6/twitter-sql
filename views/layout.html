@@ -67,4 +67,38 @@
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  // Load the socket.io library above, then connect to the server.
+  // Because the socket.io server is being run on the same server as your 
+  // Express instance, you can connect() without any arguments.
+  var socket = io.connect();
+
+  // When 'new_tweet' events are fired, do something with the packaged tweet
+  socket.on('new_tweet', function (tweet) { 
+    var tweetBox = document.createElement('div'); 
+    tweetBox.className = 'tweetbox'; 
+    var img = document.createElement('img'); 
+    img.setAttribute('src', 'http://lorempixel.com/48/48'); 
+    tweetBox.appendChild(img);
+    var content = document.createElement('div');
+    content.className = 'content'; 
+    var byline = document.createElement('a'); 
+    byline.className = 'by'; 
+    byline.innerHTML = tweet.name; 
+    byline.setAttribute('href', '/users/' + tweet.name); 
+    content.appendChild(byline); 
+    content.appendChild(document.createElement('br')); 
+    var text = document.createElement('span'); 
+    text.innerHTML = tweet.text; 
+    content.appendChild(text); 
+    content.appendChild(document.createElement('br')); 
+    var permalink = document.createElement('a');   
+    permalink.innerHTML = '#'; 
+    permalink.setAttribute('href', '/users/' + tweet.name +'/tweets/' + tweet.id);  
+	content.appendChild(permalink); 
+	tweetBox.appendChild(content); 
+	document.getElementsByClassName('col-md-9')[0].appendChild(tweetBox);
+  }); 
+</script>
 </html>

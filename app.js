@@ -2,6 +2,7 @@ var express = require('express');
 var swig = require('swig');
 
 var routes = require('./routes/' );
+var socketio = require('socket.io'); 
 
 var app = express(); 
 
@@ -13,9 +14,10 @@ app.set( 'views', process.cwd() + '/views' ); // render templates from our views
 swig.setDefaults( { cache: false } );         // disable swig caching
 
 // start app
-app.listen(3000, function() {
+var server = app.listen(3000, function() {
 	console.log('Listening on port 3000'); 
 })
+var io = socketio.listen(server); 
 
 //Log incoming requests
 app.use('/', function(req, res, next) {
@@ -27,5 +29,8 @@ app.use('/', function(req, res, next) {
 	next(); 
 });
 
-app.use('/', routes);
+//Old router
+// app.use('/', routes);
 
+var router = routes(io); 
+app.use('/', router); 
