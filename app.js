@@ -1,6 +1,8 @@
 var express = require('express'); 
 var swig = require('swig');
 
+var routes = require('./routes/' );
+
 var app = express(); 
 
 // app configuration
@@ -23,12 +25,7 @@ app.use('/', function(req, res, next) {
 
 	})
 	next(); 
-})
+});
 
-// root route /
-app.get('/', function(req, res) {
-  var people = [{name: 'Full'}, {name: 'Stacker'}];
-
-  res.render( 'index', {title: 'Hall of Fame', people: people} );
-})
+app.use('/', routes);
 
