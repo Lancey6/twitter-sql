@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
 // global data array
-var data = [];
+var data = [{ name: "David Reeve", text: "Hello, world!" }];
 
 // add an element to our data array
 function add ( name, text ) {
