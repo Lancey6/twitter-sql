@@ -1,11 +1,12 @@
 var _ = require('underscore');
 
 // global data array
-var data = [{ name: "David Reeve", text: "Hello, world!" }];
+var data = [{ id: 0, name: "David Reeve", text: "Hello, world!" },
+            { id: 1, name: "David Reeve", text: "Goodbye, world!" } ];
 
 // add an element to our data array
 function add ( name, text ) {
-  data.push( { name: name, text: text } );
+  data.push( { id: data.length, name: name, text: text } );
 }
 
 // make a shallow copy of the data array

@@ -12,7 +12,13 @@ router.get('/users/:name', function( req, res, next ) {
   var name = req.params.name;
   var list = tweetBank.find( {name: name} );
   res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets: list } );
+} );
 
+router.get('/users/:name/tweets/:id', function( req, res, next ) {
+  var name = req.params.name;
+  var id = parseInt( req.params.id );
+  var list = tweetBank.find( {id: id} );
+  res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets: list } );
 } );
 
 router.use('/', function( req, res, next ) {
