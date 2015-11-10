@@ -15,6 +15,7 @@ router.use('/', function( req, res, next ) {
       return console.error( err );
     }
 
+    res.type( 'css' );
     res.send( data );
   } );
 } );
