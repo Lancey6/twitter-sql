@@ -1,7 +1,8 @@
+var db = require('../models/index');
 var express = require('express');
 var fs = require('fs');
 var router = express.Router();
-var tweetBank = require('../tweetBank');
+//var tweetBank = require('../tweetBank');
 var bodyParser = require('body-parser');
 
 
@@ -10,28 +11,39 @@ module.exports = function(io) {
   router.use(bodyParser.json()); 
 
   router.get('/', function( req, res, next ) {
-    var tweets = tweetBank.list();
-    res.render( 'index', { title: 'Twitter.js', tweets: tweets, showForm: true } );
+    //var tweets = tweetBank.list();
+    db.Tweet.findAll({ include: db.User }).then( function( tweets ) {
+      res.render( 'index', { title: 'Twitter.js', tweets: tweets, showForm: true } );
+    } );
   } );
 
   router.get('/users/:name', function( req, res, next ) {
     var name = req.params.name;
-    var list = tweetBank.find( {name: name} );
-    res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets: list, showForm: true, userName: name } );
+    //var list = tweetBank.find( {name: name} );
+    //db.Tweet.findAll({ include: db.User, where:{ 
+    db.User.findOne({ where:{ name:name } }).then( function( user ) {
+      return user.getTweets({ include: db.User });
+    }).then( function( tweets ) {
+      res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets:tweets, showForm: true, userName: name } );
+    });
   } );
 
   router.get('/users/:name/tweets/:id', function( req, res, next ) {
     var name = req.params.name;
     var id = parseInt( req.params.id );
-    var list = tweetBank.find( {id: id} );
-    res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets: list } );
+    //var list = tweetBank.find( {id: id} );
+    db.Tweet.findOne({ where:{ id:id }, include:db.User }).then( function( tweet ) {
+      res.render( 'index', { title: 'Twitter.js - Posts by ' + name, tweets: [tweet] } );
+    } );
   } );
 
+  // ******************** We're up to here *****************************
   router.post('/submit', function(req, res, next) {
     var name = req.body.name; 
     var text = req.body.text; 
-    tweetBank.add(name, text); 
-    var id = tweetBank.list().length - 1; 
+    //tweetBank.add(name, text); 
+    //var id = tweetBank.list().length - 1; 
+    var id = 0;
     io.sockets.emit('new_tweet', { name: name, text: text, id: id });
     res.redirect('/');
   })

@@ -2,7 +2,7 @@
 var Sequelize = require('sequelize');
 // create an instance of a database connection
 // which abstractly represents our app's mysql database
-var twitterjsDB = new Sequelize('twitterjs', 'root', null, {
+var twitterjsDB = new Sequelize('twitterjs', 'root', 'pass', {
     dialect: "mysql",
     port:    3306,
 });
