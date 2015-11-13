@@ -1,3 +1,4 @@
+var chalk = require('chalk');
 var express = require('express'); 
 var swig = require('swig');
 
@@ -21,9 +22,8 @@ var io = socketio.listen(server);
 
 //Log incoming requests
 app.use('/', function(req, res, next) {
-	process.stdout.write(req.method + ' ' + req.path); 
 	res.on('finish', function(){
-		process.stdout.write(' ' + res.statusCode.toString() + '\n');
+                console.log( chalk.green( req.method ), req.path, chalk.yellow( res.statusCode ) );
 
 	})
 	next(); 
